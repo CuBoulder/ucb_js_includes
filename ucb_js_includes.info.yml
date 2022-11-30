@@ -1,0 +1,8 @@
+name: CU Boulder JS Includes
+description: 'Provides a way for adding 3rd party functionality to CU Boulder websites'
+core_version_requirement: ^8.9 || ^9
+type: module
+version: '1.0'
+package: CU Boulder
+dependencies:
+  - block
