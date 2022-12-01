@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\myblock\Plugin\Block;
+namespace Drupal\IncludesBlock\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 
@@ -8,12 +8,12 @@ use Drupal\Core\Block\BlockBase;
  * Provides a Block.
  *
  * @Block(
- *   id = "Includes",
- *   admin_label = @Translation("label"),
- *   category = @Translation("category"),
+ *   id = "IncludesBlock",
+ *   admin_label = @Translation("Includes Block"),
+ *   category = @Translation("External JavaScript"),
  * )
  */
-class Includes extends BlockBase {
+class IncludesBlock extends BlockBase {
 
   /**
    * {@inheritdoc}

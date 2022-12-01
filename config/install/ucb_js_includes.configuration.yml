@@ -1,0 +1,8 @@
+path: '/'
+Include Type:
+  label: Include Type
+  options: 
+      - 'Add AdmitHub Include Block'
+      - 'Add LiveChat Include Block'
+      - 'Add Slate Form Include'
+      - 'Add StatusPage Include Block'
