@@ -1,36 +1,20 @@
 <?php
 
-namespace Drupal\myblock\Plugin\Block;
-
-use Drupal\Core\Block\BlockBase;
-
-/**
- * Provides a Block.
- *
- * @Block(
- *   id = "Includes",
- *   admin_label = @Translation("label"),
- *   category = @Translation("category"),
- * )
+ /**
+ * Implements hook_theme().
  */
-class Includes extends BlockBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-    return [
-      // This can be a simple bit of markup or a complex render array!
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#attributes' => [
-        'class' => [
-          'my-class',
-        ],
-      ],
-      // Attach our third party JS, as defined in the module's libraries.yml file.
-    //   '#attached' => ['library' => ['library_name/component']],
-    ];
-  }
-
+function ucb_js_includes_theme() {
+	$config = \Drupal::config('ucb_js_includes.configuration');
+	$globalConfigVariables = [
+		'blockType' => $config->get('blockType'),
+		'config' => $config->get('config'),
+	];
+	return [
+		'ucb_js_includes' => [
+			'variables' => [
+				'globalConfig' => $globalConfigVariables,
+				'data' => []
+			]
+		]
+	];
 }

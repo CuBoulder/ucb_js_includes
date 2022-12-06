@@ -1,0 +1,7 @@
+ucb-js-includes:
+  version: 1.0
+  js:
+    js/ucb-js-includes.js: {}
+  css:
+    theme:
+      css/ucb-js-includes.css: {}

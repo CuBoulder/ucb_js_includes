@@ -1,0 +1,11 @@
+{{ attach_library('ucb_js_includes/ucb-js-includes') }}
+
+{%
+	set classes = []
+%}
+
+<div>
+    <div>
+        <p>{{data|json_encode}}</p>
+    </div>
+</div>

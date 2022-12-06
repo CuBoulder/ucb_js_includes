@@ -25,18 +25,52 @@ class IncludesBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $blockConfiguration = $this->getConfiguration();
+    $admitHub = [];
+    // AdmitHub
+    if(isset($blockConfiguration['includes_block_ah_license']) && isset($blockConfiguration['includes_block_ah_college'])){
+      $admitHub = array(
+        'ah_license'=> $blockConfiguration['includes_block_ah_license'],
+        'ah_college'=> $blockConfiguration['includes_block_ah_college']
+      );
+    };
+    // Live Chat
+    $liveChat = [];
+    if(isset($blockConfiguration['includes_block_lc_license'])){
+      $liveChat = array(
+        'ah_license'=> $blockConfiguration['includes_block_lc_license'],
+      );
+    };
+
+    // Slate
+    $slate = [];
+    if(isset($blockConfiguration['includes_block_slate_form_id']) && isset($blockConfiguration['includes_block_slate_domain'])){
+      $slate = array(
+        'form_id'=> $blockConfiguration['includes_block_slate_form_id'],
+        'domain'=> $blockConfiguration['includes_block_slate_domain']
+      );
+    };
+
+    // Status Page
+    $statusPage = [];
+    if(isset($blockConfiguration['includes_block_sp_url'])){
+      $slate = array(
+        'url'=> $blockConfiguration['includes_block_sp_url'],
+      );
+    };
+
     return [
-      // This can be a simple bit of markup or a complex render array!
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#attributes' => [
-        'class' => [
-          'my-class',
-        ],
-      ],
-      // Attach our third party JS, as defined in the module's libraries.yml file.
-    //   '#attached' => ['library' => ['library_name/component']],
-    ];
+			'#data' => [
+				'blockType' => $blockConfiguration['includes_block'], 
+        'config'=> array(
+          'admitHub' => $admitHub,
+          'liveChat' => $liveChat,
+          'slate'=> $slate,
+          'statusPage' => $statusPage
+        )
+			],
+			'#theme' => 'ucb_js_includes'
+		];
   }
 
   public function blockForm($form, FormStateInterface $form_state) {
@@ -54,7 +88,9 @@ class IncludesBlock extends BlockBase {
         // 'id' => 'include_block_type',
         'name' => 'field_include_block_type',
       ],
-			'#description'    => t('Create an Include Block for the selected type')
+			'#description'    => t('Create an Include Block for the selected type'),
+      // '#required' => TRUE,
+      // '#required_error' => 'Please select an Include type, as well as provide any secondary information needed for your Include',
 		];
 
     $form['includes_block_ah_license'] = [
@@ -117,7 +153,7 @@ class IncludesBlock extends BlockBase {
       '#size' => '60',
       '#placeholder' => 'StatusPage.io URL',
       '#states' => [
-        //show this textfield only if the AdmitHub is selected above
+        //show this textfield only if the StatusPage is selected above
         'visible' => [
           ':input[name="field_include_block_type"]' => ['value' => 'Add StatusPage Include'],
         ],
