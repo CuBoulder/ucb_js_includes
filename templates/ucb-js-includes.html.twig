@@ -4,8 +4,10 @@
 	set classes = []
 %}
 
-<div>
     <div>
-        <p>{{data|json_encode}}</p>
+        <h1>target me</h1>
+    <js-include 
+        {{attributes.addClass(classes)}}
+        config="{{data['includes_block']|json_encode}}">
+    </js-include>
     </div>
-</div>

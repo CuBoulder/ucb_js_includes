@@ -6,7 +6,7 @@
 function ucb_js_includes_theme() {
 	$config = \Drupal::config('ucb_js_includes.configuration');
 	$globalConfigVariables = [
-		'blockType' => $config->get('blockType'),
+		'blockType' => $config->get('includes_block'),
 		'config' => $config->get('config'),
 	];
 	return [

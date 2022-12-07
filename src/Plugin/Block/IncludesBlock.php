@@ -9,6 +9,9 @@ namespace Drupal\ucb_js_includes\Plugin\Block;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Config\ImmutableConfig;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a Block.
@@ -19,11 +22,37 @@ use Drupal\Core\Block\BlockBase;
  *   category = @Translation("External JavaScript"),
  * )
  */
-class IncludesBlock extends BlockBase {
+class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface{
+	/**
+	 * @var \Drupal\Core\Config\ImmutableConfig $moduleConfiguration
+	 *   Contains the configuration parameters for this module.
+	 */
+  public $moduleConfiguration;
+  
+  	/**
+	 * Constructs a JSIncludesBlock.
+	 * @param array $configuration
+	 * @param string $plugin_id
+	 * @param mixed $plugin_definition
+	 * @param \Drupal\Core\Config\ImmutableConfig $moduleConfiguration
+	 */
+	public function __construct(array $configuration, $plugin_id, $plugin_definition, ImmutableConfig $moduleConfiguration) {
+		parent::__construct($configuration, $plugin_id, $plugin_definition);
+		$this->moduleConfiguration = $moduleConfiguration;
+	}
 
-  /**
-   * {@inheritdoc}
-   */
+  	/**
+	 * {@inheritdoc}
+	 */
+	public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+		return new static(
+			$configuration,
+			$plugin_id,
+			$plugin_definition,
+			$container->get('config.factory')->get('ucb_js_includes.configuration')
+		);
+  }
+
   public function build() {
     $blockConfiguration = $this->getConfiguration();
     $admitHub = [];
@@ -61,13 +90,13 @@ class IncludesBlock extends BlockBase {
 
     return [
 			'#data' => [
-				'blockType' => $blockConfiguration['includes_block'], 
-        'config'=> array(
-          'admitHub' => $admitHub,
-          'liveChat' => $liveChat,
-          'slate'=> $slate,
-          'statusPage' => $statusPage
-        )
+				'includes_block' => $blockConfiguration['includes_block'], 
+        // 'config'=> array(
+        //   'admitHub' => $admitHub,
+        //   'liveChat' => $liveChat,
+        //   'slate'=> $slate,
+        //   'statusPage' => $statusPage
+        // )
 			],
 			'#theme' => 'ucb_js_includes'
 		];
@@ -162,14 +191,23 @@ class IncludesBlock extends BlockBase {
     return $form;
   }
 
+  	/**
+	 * {@inheritdoc}
+	 */
   public function blockSubmit($form, FormStateInterface $form_state) {
-    $values = $form_state->getValues();
-    $this->configuration['includes_block'] = $values['includes_block'];
+    $formvValues = $form_state->getValues();
+
+		$this->configuration['includes_block'] = $formvValues;
+    $this->configuration['block_type'] = $formvValues['field_include_block_type'];
+
+    parent::blockSubmit($form, $form_state);
+
   }
 
   public function defaultConfiguration() {
     return [
-      'IncludesBlock' => $this->t(''),
+      'includes_block' => "", 
+      'block_type'=>""
     ];
   }
 
