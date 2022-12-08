@@ -55,38 +55,38 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
 
   public function build() {
     $blockConfiguration = $this->getConfiguration();
-    $admitHub = [];
-    // AdmitHub
-    if(isset($blockConfiguration['includes_block_ah_license']) && isset($blockConfiguration['includes_block_ah_college'])){
-      $admitHub = array(
-        'ah_license'=> $blockConfiguration['includes_block_ah_license'],
-        'ah_college'=> $blockConfiguration['includes_block_ah_college']
-      );
-    };
-    // Live Chat
-    $liveChat = [];
-    if(isset($blockConfiguration['includes_block_lc_license'])){
-      $liveChat = array(
-        'ah_license'=> $blockConfiguration['includes_block_lc_license'],
-      );
-    };
+    // $admitHub = [];
+    // // AdmitHub
+    // if(isset($blockConfiguration['includes_block_ah_license']) && isset($blockConfiguration['includes_block_ah_college'])){
+    //   $admitHub = array(
+    //     'ah_license'=> $blockConfiguration['includes_block_ah_license'],
+    //     'ah_college'=> $blockConfiguration['includes_block_ah_college']
+    //   );
+    // };
+    // // Live Chat
+    // $liveChat = [];
+    // if(isset($blockConfiguration['includes_block_lc_license'])){
+    //   $liveChat = array(
+    //     'ah_license'=> $blockConfiguration['includes_block_lc_license'],
+    //   );
+    // };
 
-    // Slate
-    $slate = [];
-    if(isset($blockConfiguration['includes_block_slate_form_id']) && isset($blockConfiguration['includes_block_slate_domain'])){
-      $slate = array(
-        'form_id'=> $blockConfiguration['includes_block_slate_form_id'],
-        'domain'=> $blockConfiguration['includes_block_slate_domain']
-      );
-    };
+    // // Slate
+    // $slate = [];
+    // if(isset($blockConfiguration['includes_block_slate_form_id']) && isset($blockConfiguration['includes_block_slate_domain'])){
+    //   $slate = array(
+    //     'form_id'=> $blockConfiguration['includes_block_slate_form_id'],
+    //     'domain'=> $blockConfiguration['includes_block_slate_domain']
+    //   );
+    // };
 
-    // Status Page
-    $statusPage = [];
-    if(isset($blockConfiguration['includes_block_sp_url'])){
-      $slate = array(
-        'url'=> $blockConfiguration['includes_block_sp_url'],
-      );
-    };
+    // // Status Page
+    // $statusPage = [];
+    // if(isset($blockConfiguration['includes_block_sp_url'])){
+    //   $slate = array(
+    //     'url'=> $blockConfiguration['includes_block_sp_url'],
+    //   );
+    // };
 
     return [
 			'#data' => [
