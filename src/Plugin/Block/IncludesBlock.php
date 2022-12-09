@@ -91,7 +91,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
     return [
 			'#data' => [
 				'includes_block' => $blockConfiguration['includes_block'], 
-        'block_type' => $blockConfiguration['block_type']
+        // 'block_type' => $blockConfiguration['block_type']
         // 'config'=> array(
         //   'admitHub' => $admitHub,
         //   'liveChat' => $liveChat,
@@ -200,7 +200,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
     $formvValues = $form_state->getValues();
 
 		$this->configuration['includes_block'] = $formvValues;
-    $this->configuration['block_type'] = $formvValues['values']['includes_block'];
+    // $this->configuration['block_type'] = $formvValues['values']['includes_block'];
 
     parent::blockSubmit($form, $form_state);
 
@@ -209,7 +209,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
   public function defaultConfiguration() {
     return [
       'includes_block' => "", 
-      'block_type'=>""
+      // 'block_type'=>""
     ];
   }
 
