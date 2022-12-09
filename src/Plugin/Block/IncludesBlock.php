@@ -91,6 +91,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
     return [
 			'#data' => [
 				'includes_block' => $blockConfiguration['includes_block'], 
+        'block_type' => $blockConfiguration['block_type']
         // 'config'=> array(
         //   'admitHub' => $admitHub,
         //   'liveChat' => $liveChat,
@@ -107,17 +108,18 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
 			'#type'           => 'radios',
 			'#title'          => $this->t('Include Block Type'),
 			'#options'        => [
-				'Add AdmitHub Include' =>$this->t('AdmitHub'),
-				'Add LiveChat Include' =>$this->t('LiveChat'),
-				'Add Slate Page Include' =>$this->t('Slate'),
-				'Add StatusPage Include' =>$this->t('StatusPage')
+				'AdmitHub' =>$this->t('Add AdmitHub Include'),
+				'LiveChat' =>$this->t('Add LiveChat Include'),
+				'Slate' =>$this->t('Add SlatePage Include'),
+				'StatusPage' =>$this->t('Add StatusPage Include')
 			],
       '#attributes' => [
         //define static name and id so we can easier select it
         // 'id' => 'include_block_type',
-        'name' => 'field_include_block_type',
+        // 'name' => 'field_include_block_type',
       ],
 			'#description'    => t('Create an Include Block for the selected type'),
+      '#default_value' => $this->getConfiguration()['block_type'],
       // '#required' => TRUE,
       // '#required_error' => 'Please select an Include type, as well as provide any secondary information needed for your Include',
 		];
@@ -129,7 +131,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the AdmitHub is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add AdmitHub Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'AdmitHub'],
         ],
       ],
     ];
@@ -140,7 +142,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the AdmitHub is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add AdmitHub Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'AdmitHub'],
         ],
       ],
     ];
@@ -151,7 +153,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the LiveChat is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add LiveChat Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'LiveChat'],
         ],
       ],
     ];
@@ -162,7 +164,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the Slate is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add Slate Page Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'Slate'],
         ],
       ],
     ];
@@ -173,7 +175,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the Slate is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add Slate Page Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'Slate'],
         ],
       ],
     ];
@@ -184,7 +186,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
       '#states' => [
         //show this textfield only if the StatusPage is selected above
         'visible' => [
-          ':input[name="field_include_block_type"]' => ['value' => 'Add StatusPage Include'],
+          ':input[name="settings[includes_block]"]' => ['value' => 'StatusPage'],
         ],
       ],
     ];
@@ -198,7 +200,7 @@ class IncludesBlock extends BlockBase implements ContainerFactoryPluginInterface
     $formvValues = $form_state->getValues();
 
 		$this->configuration['includes_block'] = $formvValues;
-    $this->configuration['block_type'] = $formvValues['field_include_block_type'];
+    $this->configuration['block_type'] = $formvValues['values']['includes_block'];
 
     parent::blockSubmit($form, $form_state);
 
