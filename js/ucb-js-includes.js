@@ -6,9 +6,7 @@ class JSBlockElement extends HTMLElement {
 
     }
 
-    build(config){      
-        // console.log('config', config)  
-
+    build(config){
         const blockType = config.includes_block;
 
         switch (blockType) {
@@ -35,7 +33,7 @@ class JSBlockElement extends HTMLElement {
     generateSlate(config){
 
     }
-
+    
     generateAdmitHub(config){
        let tokenScript = document.createElement('script')
        tokenScript.innerText= `window.admitHubBot = {botToken: "${config.includes_block_ah_license}" };`
@@ -53,8 +51,24 @@ class JSBlockElement extends HTMLElement {
 
     }
 
-    generateStatusPage(){
+    generateStatusPage(config){
+        // Only IE11
+        const polyfillScript = document.createElement('script');
+        polyfillScript.src="https://cdn.polyfill.io/v2/polyfill.min.js"
+        // All
+        const widgetScript = document.createElement('script');
+        widgetScript.src ="https://unpkg.com/@statuspage/status-widget/dist/index.js";
 
+        const webcomponentScript = document.createElement('script');
+        webcomponentScript.src = "https://unpkg.com/@webcomponents/webcomponentsjs@2.1.3/webcomponents-bundle.js"
+
+        const StatusPage = document.createElement('statuspage-widget');
+        StatusPage.src = config.includes_block_sp_url
+
+        this.appendChild(polyfillScript)
+            .appendChild(webcomponentScript)
+            .appendChild(widgetScript)
+            .appendChild(StatusPage)
     }
     generateLiveChat(){
 
