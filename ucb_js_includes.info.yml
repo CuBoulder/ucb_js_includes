@@ -6,3 +6,4 @@ version: '1.0'
 package: CU Boulder
 dependencies:
   - block
+  - ucb_site_configuration

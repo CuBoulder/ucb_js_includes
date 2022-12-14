@@ -1,5 +1,11 @@
 <?php
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
  /**
  * Implements hook_theme().
  */
@@ -17,4 +23,66 @@ function ucb_js_includes_theme() {
 			]
 		]
 	];
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function ucb_js_includes_entity_base_field_info(EntityTypeInterface $entity_type) {
+	if($entity_type->id() === 'node') {
+		$fields = [];
+		$fields['ucb_third_party_services'] = BaseFieldDefinition::create('list_string')
+			->setLabel(t('Third-party services'))
+			->setSettings(['allowed_values' => [ // TODO: This list comes from site configuration, which is a required dependency of this module
+				'admithub' => 'AdmitHub',
+				'livechat' => 'LiveChat']])
+			->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+			->setDefaultValue([])
+			->setDisplayConfigurable('form', FALSE)
+    		->setDisplayConfigurable('view', FALSE);
+		return $fields;
+	}
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function ucb_js_includes_form_node_form_alter(&$form, FormStateInterface $form_state) {
+	/** @var \Drupal\node\NodeInterface $node */
+	$node = $form_state->getFormObject()->getEntity();
+	$nodeServicesField = $node->get('ucb_third_party_services');
+	$nodeServicesFieldItems = $nodeServicesField->getValue();
+	$nodeServicesFieldAllowedOptions = $nodeServicesField->getFieldDefinition()->getSetting('allowed_values');
+	/** @var \Symfony\Component\Routing\Route */
+    $siteSettingsRoute = \Drupal::service('router.route_provider')->getRouteByName('ucb_site_configuration.settings_form');
+	$form['ucb_js_includes'] = [
+		'#type' => 'details',
+   		'#title' => t('Third-party services'),
+		'#group' => 'advanced',
+		'#open' => (bool) $nodeServicesFieldItems,
+		'ucb_js_includes_services' => [
+			'#type'  => 'checkboxes',
+			'#title' => t('Choose services to include'),
+			'#description' => t('Configure third-party services for this site in <a href="' . $siteSettingsRoute->getPath() . '">' . $siteSettingsRoute->getDefault('_title') . '</a>. Some avaliable third-party services may not be listed here.'),
+			'#options' => $nodeServicesFieldAllowedOptions,
+			'#default_value' => array_map(function($fieldItem) { return $fieldItem['value']; }, $nodeServicesFieldItems)
+		]
+	];
+	foreach (array_keys($form['actions']) as $action) {
+		if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+			$form['actions'][$action]['#submit'][] = 'ucb_js_includes_form_node_form_submit';
+		}
+	}
+}
+
+/**
+ * Saves the third-party services settings when a node is saved.
+ */
+function ucb_js_includes_form_node_form_submit($form, FormStateInterface $form_state) {
+	/** @var \Drupal\node\NodeInterface */
+	$node = $form_state->getFormObject()->getEntity();
+	$nodeServicesField = $node->get('ucb_third_party_services');
+	$nodeServicesFieldAllowedValues = array_keys($nodeServicesField->getFieldDefinition()->getSetting('allowed_values'));
+	$nodeServicesField->setValue(array_filter(array_values($form_state->getValue('ucb_js_includes_services')), function($value) use($nodeServicesFieldAllowedValues) { return in_array($value, $nodeServicesFieldAllowedValues); }));
+	$node->save();
 }
