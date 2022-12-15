@@ -31,7 +31,28 @@ class JSBlockElement extends HTMLElement {
     }
 
     generateSlate(config){
-
+        let div = document.createElement('div')
+        div.id = `form_${config.includes_block_slate_form_id}`
+        div.innerText = "Loading..."
+        let outerScript = document.createElement('script')
+        outerScript.innerText = `
+            var script = document.createElement('script');
+            var div = jQuery('.field-item'),
+            comment = div.contents().filter(function() {
+            return this.nodeType === 8;
+            }).get(0);
+        
+        if (typeof comment !== "undefined") {
+            var options = comment.nodeValue.split(":");
+            var optionsquery = '&sys:field:' + options[0] + '=' + options[1];
+        } else {
+            var optionsquery = '';
+        }
+        script.async = 1; script.src = 'https://${config.includes_block_slate_domain}/register/?id=${config.includes_block_slate_form_id}&output=embed' + optionsquery + '&div=form_${config.includes_block_slate_form_id}' + ((location.search.length > 1) ? '&' + location.search.substring(1) : ''); var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        `
+        outerScript.innerText.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,' ') // removes line breaks from template
+        this.appendChild(div)
+        this.appendChild(outerScript)
     }
     
     generateAdmitHub(config){
@@ -52,9 +73,6 @@ class JSBlockElement extends HTMLElement {
     }
 
     generateStatusPage(config){
-        // Only IE11
-        const polyfillScript = document.createElement('script');
-        polyfillScript.src="https://cdn.polyfill.io/v2/polyfill.min.js"
         // All
         const widgetScript = document.createElement('script');
         widgetScript.src ="https://unpkg.com/@statuspage/status-widget/dist/index.js";
